@@ -1,8 +1,11 @@
+//Function that takes in a numbers array as argument and computes for correlation based on the elements of the array
 function corr(arr){
 	var phi = (arr[3]*arr[0] - arr[2]*arr[1])/Math.sqrt((arr[2]+arr[3])*(arr[0]+arr[1])*(arr[1]+arr[3])*(arr[0]+arr[2]));
 	return phi;
 }
 
+//Function to determine whether, in a given string array, a particular string of interest is present
+//this function will be used to determine if a particular event is present in an entry to the journal
 function hasEvent2(event,entry){
 	for(var i=0;i<entry["events"].length;i++){
 		if(entry["events"][i] == event){
@@ -12,6 +15,7 @@ function hasEvent2(event,entry){
 	return false;
 }
 
+//function to create the numerical array that is the argument in corr function
 function eventTable(event,journal){
 	var table = [0,0,0,0];
 	for(var i=0;i<journal.length;i++){
@@ -23,6 +27,7 @@ function eventTable(event,journal){
 	return table;   
 }
 
+//to create an array that lists all the particular events that may be a factor in transforming into a squirrel
 function eventArray(journal){
 	var arr = [];
 	for(var i=0;i<journal.length;i++){
@@ -35,16 +40,23 @@ function eventArray(journal){
 	return arr;
 }
 
-function corrList(arr,journal){
+//to list down all particular events and their respective correlations - useful to identify the highest value correlations,
+//both positive and negative
+function corrList(journal){
 	var obj = {};
-	for(var i=0;i<arr.length;i++){
-		obj[arr[i]] = corr(eventTable(arr[i],journal),journal);
-	}
+	var arr = eventArray(journal)
+	arr.forEach(function(element){
+		obj[element] = corr(eventTable(element,journal),journal);
+	});
+	
 	return obj;
 }
 
+//to identify the highest positive and negative correlations and list the two events corresponding and return an object
+//that enumerates these vents alongside their respective correlations
 function causeOfEvent(obj){
 	var arr = [],obj1 = {};
+	obj = corrList(obj);
 	for(var prop in obj){
 		arr.push(obj[prop]);
 	}
@@ -55,10 +67,12 @@ function causeOfEvent(obj){
 			obj1[prop2] = obj[prop2];
 		}
 	};
+	console.log("The two factors that contribute mostly in squirrel transformation are: ");
+	for(var prop3 in obj1){
+		console.log(prop3);
+	}
 	return obj1;
 }
-
-
 
 var JOURNAL = [
   {"events":["carrot","exercise","weekend"],"squirrel":false},
@@ -152,4 +166,6 @@ var JOURNAL = [
   {"events":["bread","brushed teeth","television","weekend"],"squirrel":false},
   {"events":["cauliflower","peanuts","brushed teeth","weekend"],"squirrel":false}
 ];
+
+
 
