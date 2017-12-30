@@ -287,3 +287,26 @@ length:18
 ... etc for male
 */
 
+//Write two functions, every and some, that behave like these methods, except that they take the 
+//array as their first argument rather than being a method.
+
+function some(arr,f){
+	for(var i=0;i<arr.length;i++){
+		if(f(arr[i])) return true;
+	}
+	return false;
+}
+
+function every(arr,f){
+	for(var i=0;i<arr.length;i++){
+		if(!f(arr[i])) return false;
+	}
+	return true;
+}
+
+some([NaN,NaN,4],isNaN);
+//true
+
+every([NaN,NaN,NaN],isNaN)
+//true
+
